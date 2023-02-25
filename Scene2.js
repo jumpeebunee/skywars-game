@@ -35,6 +35,24 @@ class Scene2 extends Phaser.Scene {
       repeat: 0,
       hideOnComplete: true,
     })
+    this.anims.create({
+      key: 'red',
+      frames: this.anims.generateFrameNumbers('power-up', {
+        start: 0,
+        end: 1,
+      }),
+      frameRate: 20,
+      repeat: -1,
+    })
+    this.anims.create({
+      key: 'gray',
+      frames: this.anims.generateFrameNumbers('power-up', {
+        start: 2,
+        end: 3,
+      }),
+      frameRate: 20,
+      repeat: -1,
+    })
 
     this.ship1.play('ship1_anim');
     this.ship2.play('ship2_anim');
@@ -43,6 +61,25 @@ class Scene2 extends Phaser.Scene {
     this.ship1.setInteractive();
 
     this.input.on('gameobjectdown', this.destroyShip, this);
+
+    // power-ups
+
+    this.powerUps = this.physics.add.group();
+    for (let i = 0; i <= 4; i += 1) {
+      let powerUp = this.physics.add.sprite(16,16, 'power-up');
+      this.powerUps.add(powerUp);
+      powerUp.setRandomPosition(0,0, GAME_CONFIG.width, GAME_CONFIG.height);
+
+      if (Math.random() > 0.5) {
+        powerUp.play('red')
+      } else {
+        powerUp.play('gray');
+      }
+
+      powerUp.setVelocity(100, 100);
+      powerUp.setCollideWorldBounds(true);
+      powerUp.setBounce(1);
+    }
   }
   update() {
     this.moveShip(this.ship1, 1);
@@ -59,14 +96,14 @@ class Scene2 extends Phaser.Scene {
     }
   }
   resetShip(ship) {
-    ship.x = this.getRandomPosition();
+    ship.x = this.getRandomPosition(GAME_CONFIG.width);
     ship.y = 0;
   }
   destroyShip(pointer, gameObject) {
     gameObject.setTexture('explosion');
     gameObject.play('explode');
   }
-  getRandomPosition() {
-    return Math.floor(Math.random() * (GAME_CONFIG.width - 0) + 0);
+  getRandomPosition(max) {
+    return Math.floor(Math.random() * (max - 0) + 0);
   }
 }

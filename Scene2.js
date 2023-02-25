@@ -9,6 +9,40 @@ class Scene2 extends Phaser.Scene {
     this.ship1 = this.add.sprite(GAME_CONFIG.width / 2 - 50, GAME_CONFIG.height / 2, 'ship1');
     this.ship2 = this.add.sprite(GAME_CONFIG.width / 2, GAME_CONFIG.height / 2, 'ship2');
     this.ship3 = this.add.sprite(GAME_CONFIG.width / 2 + 50, GAME_CONFIG.height / 2, 'ship3');
+
+    this.anims.create({
+      key: 'ship1_anim',
+      frames: this.anims.generateFrameNumbers('ship1'),
+      frameRate: 20,
+      repeat: -1,
+    })
+    this.anims.create({
+      key: 'ship2_anim',
+      frames: this.anims.generateFrameNumbers('ship2'),
+      frameRate: 20,
+      repeat: -1,
+    })
+    this.anims.create({
+      key: 'ship3_anim',
+      frames: this.anims.generateFrameNumbers('ship3'),
+      frameRate: 20,
+      repeat: -1,
+    })
+    this.anims.create({
+      key: 'explode',
+      frames: this.anims.generateFrameNumbers('explosion'),
+      frameRate: 20,
+      repeat: 0,
+      hideOnComplete: true,
+    })
+
+    this.ship1.play('ship1_anim');
+    this.ship2.play('ship2_anim');
+    this.ship3.play('ship3_anim');
+
+    this.ship1.setInteractive();
+
+    this.input.on('gameobjectdown', this.destroyShip, this);
   }
   update() {
     this.moveShip(this.ship1, 1);
@@ -27,6 +61,10 @@ class Scene2 extends Phaser.Scene {
   resetShip(ship) {
     ship.x = this.getRandomPosition();
     ship.y = 0;
+  }
+  destroyShip(pointer, gameObject) {
+    gameObject.setTexture('explosion');
+    gameObject.play('explode');
   }
   getRandomPosition() {
     return Math.floor(Math.random() * (GAME_CONFIG.width - 0) + 0);

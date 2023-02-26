@@ -3,31 +3,31 @@ class Scene1 extends Phaser.Scene {
     super('bootGame');
   }
   loadSprites() {
-    this.load.spritesheet('ship1', './assets/ship1.png', {
+    this.load.spritesheet('ship1', './assets/spritesheets/ship1.png', {
       frameWidth: 16,
       frameHeight: 16,
     })
-    this.load.spritesheet('ship2', './assets/ship2.png', {
+    this.load.spritesheet('ship2', './assets/spritesheets/ship2.png', {
       frameWidth: 32,
       frameHeight: 16,
     })
-    this.load.spritesheet('ship3', './assets/ship3.png', {
+    this.load.spritesheet('ship3', './assets/spritesheets/ship3.png', {
       frameWidth: 32,
       frameHeight: 32,
     })
-    this.load.spritesheet('explosion', './assets/explosion.png', {
+    this.load.spritesheet('explosion', './assets/spritesheets/explosion.png', {
       frameWidth: 16,
       frameHeight: 16,
     })
-    this.load.spritesheet('power-up', './assets/power-up.png', {
+    this.load.spritesheet('power-up', './assets/spritesheets/power-up.png', {
       frameWidth: 16,
       frameHeight: 16,
     })
-    this.load.spritesheet('player', './assets/player.png', {
+    this.load.spritesheet('player', './assets/spritesheets/player.png', {
       frameWidth: 16,
       frameHeight: 24,
     })
-    this.load.spritesheet('beam','./assets/beam.png', {
+    this.load.spritesheet('beam','./assets/spritesheets/beam.png', {
       frameWidth: 16,
       frameHeight: 16,
     })

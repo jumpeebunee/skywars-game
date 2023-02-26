@@ -1,20 +1,16 @@
-const GAME_SETTINGS = {
-  playerSpeed: 100,
-}
-
 class Scene2 extends Phaser.Scene {
   constructor() {
     super('playGame');
   }
   create() {
-    this.background = this.add.tileSprite(0,0,GAME_CONFIG.width, GAME_CONFIG.height, 'background');
+    this.background = this.add.tileSprite(0,0, GAME_CONFIG.width, GAME_CONFIG.height, 'background');
     this.background.setOrigin(0, 0);
 
     this.ship1 = this.add.sprite(GAME_CONFIG.width / 2 - 50, GAME_CONFIG.height / 2, 'ship1');
     this.ship2 = this.add.sprite(GAME_CONFIG.width / 2, GAME_CONFIG.height / 2, 'ship2');
     this.ship3 = this.add.sprite(GAME_CONFIG.width / 2 + 50, GAME_CONFIG.height / 2, 'ship3');
 
-    this.player = this.physics.add.sprite(GAME_CONFIG.width / 2, GAME_CONFIG.height / 2, 'player');
+    this.player = this.physics.add.sprite(GAME_SETTINGS.defaultX, GAME_SETTINGS.defaultY, 'player');
 
     this.ship1.play('ship1_anim');
     this.ship2.play('ship2_anim');
@@ -29,12 +25,23 @@ class Scene2 extends Phaser.Scene {
 
     this.input.on('gameobjectdown', this.destroyShip, this);
 
-    this.createPowerUps();
-    
     this.cursorKeys = this.input.keyboard.createCursorKeys();
     this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
+    this.powerUps = this.physics.add.group();
     this.beams = this.add.group();
+    this.enemies = this.physics.add.group();
+
+    this.enemies.add(this.ship1);
+    this.enemies.add(this.ship2);
+    this.enemies.add(this.ship3);
+
+    this.physics.add.collider(this.beams, this.powerUps, this.powerUpHit)
+    this.physics.add.overlap(this.player, this.powerUps, this.takePowerUp, null, this);
+    this.physics.add.overlap(this.player, this.enemies, this.destroyPlayer, null, this);
+    this.physics.add.overlap(this.beams, this.enemies, this.destroyEnemy, null, this);
+
+    this.createPowerUps();
   }
   update() {
     this.moveShip(this.ship1, 1);
@@ -77,7 +84,6 @@ class Scene2 extends Phaser.Scene {
     let beam = new Beam(this);
   }
   createPowerUps() {
-    this.powerUps = this.physics.add.group();
     for (let i = 0; i <= 4; i += 1) {
       let powerUp = this.physics.add.sprite(16,16, 'power-up');
       this.powerUps.add(powerUp);
@@ -108,6 +114,21 @@ class Scene2 extends Phaser.Scene {
   destroyShip(pointer, gameObject) {
     gameObject.setTexture('explosion');
     gameObject.play('explode');
+  }
+  destroyPlayer(player, enemy) {
+    this.resetShip(enemy);
+    player.x = GAME_SETTINGS.defaultX;
+    player.y = GAME_SETTINGS.defaultY;
+  }
+  destroyEnemy(beam, enemy) {
+    beam.destroy();
+    this.resetShip(enemy);
+  }
+  powerUpHit(beam) {
+    beam.destroy();
+  }
+  takePowerUp(player, powerUp) {
+    powerUp.disableBody(true, true);
   }
   getRandomPosition(max) {
     return Math.floor(Math.random() * (max - 0) + 0);

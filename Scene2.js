@@ -33,6 +33,8 @@ class Scene2 extends Phaser.Scene {
     
     this.cursorKeys = this.input.keyboard.createCursorKeys();
     this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+
+    this.beams = this.add.group();
   }
   update() {
     this.moveShip(this.ship1, 1);
@@ -43,6 +45,11 @@ class Scene2 extends Phaser.Scene {
 
     this.playerMove();
     if (Phaser.Input.Keyboard.JustDown(this.spacebar)) this.playerAttack();
+
+    for (let i = 0; i < this.beams.getChildren().length; i += 1) {
+      let beam = this.beams.getChildren()[i];
+      beam.update();
+    }
   }
   playerMove() {
     const cursorKey = this.cursorKeys;
@@ -67,7 +74,7 @@ class Scene2 extends Phaser.Scene {
     }
   }
   playerAttack() {
-    console.log('shoot')
+    let beam = new Beam(this);
   }
   createPowerUps() {
     this.powerUps = this.physics.add.group();

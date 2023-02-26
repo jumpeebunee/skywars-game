@@ -35,6 +35,12 @@ class Scene1 extends Phaser.Scene {
   loadImages() {
     this.load.image('background', './assets/background.png');
   }
+  loadSounds() {
+    this.load.audio('music', ['./assets/sounds/sci-fi_platformer12.ogg', './assets/sounds/sci-fi_platformer12.mp3']);
+    this.load.audio('beam_sound', ['./assets/sounds/beam.ogg', './assets/sounds/beam.mp3']);
+    this.load.audio('explosion_sound', ['./assets/sounds/explosion.ogg', './assets/sounds/explosion.mp3']);
+    this.load.audio('pickup_sound', ['./assets/sounds/pickup.ogg', './assets/sounds/pickup.mp3']);
+  }
   createAnimation() {
     this.anims.create({
       key: 'ship1_anim',
@@ -94,6 +100,7 @@ class Scene1 extends Phaser.Scene {
   }
   preload() {
     this.load.bitmapFont('pixelFont', './assets/font/font.png', './assets/font/font.xml');
+    this.loadSounds();
     this.loadSprites();
     this.loadImages();
   }

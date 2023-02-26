@@ -41,6 +41,12 @@ class Scene2 extends Phaser.Scene {
     this.physics.add.overlap(this.player, this.enemies, this.destroyPlayer, null, this);
     this.physics.add.overlap(this.beams, this.enemies, this.destroyEnemy, null, this);
 
+    this.music = this.sound.add('music');
+    this.beamSound = this.sound.add('beam_sound');
+    this.explosionSound = this.sound.add('explosion_sound');
+    this.pickupSound = this.sound.add('pickup_sound');
+    this.music.play(MUSIC_CONFIG);
+
     this.createPowerUps();
     this.createScorePoint();
   }
@@ -83,6 +89,7 @@ class Scene2 extends Phaser.Scene {
   }
   playerAttack() {
     let beam = new Beam(this);
+    this.beamSound.play();
   }
   createPowerUps() {
     for (let i = 0; i <= 4; i += 1) {
@@ -114,6 +121,7 @@ class Scene2 extends Phaser.Scene {
   }
   destroyPlayer(player, enemy) {
     this.resetShip(enemy);
+    this.explosionSound.play();
     if (this.player.alpha >= 1) {
       let explosion = new Explosion(this, player.x, player.y);
       player.disableBody(true, true);
@@ -149,11 +157,13 @@ class Scene2 extends Phaser.Scene {
     beam.destroy();
     this.resetShip(enemy);
     this.updateScore();
+    this.explosionSound.play();
   }
   powerUpHit(beam) {
     beam.destroy();
   }
   takePowerUp(player, powerUp) {
+    this.pickupSound.play();
     powerUp.disableBody(true, true);
   }
   updateScore() {

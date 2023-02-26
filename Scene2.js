@@ -1,3 +1,7 @@
+const GAME_SETTINGS = {
+  playerSpeed: 100,
+}
+
 class Scene2 extends Phaser.Scene {
   constructor() {
     super('playGame');
@@ -10,60 +14,62 @@ class Scene2 extends Phaser.Scene {
     this.ship2 = this.add.sprite(GAME_CONFIG.width / 2, GAME_CONFIG.height / 2, 'ship2');
     this.ship3 = this.add.sprite(GAME_CONFIG.width / 2 + 50, GAME_CONFIG.height / 2, 'ship3');
 
-    this.anims.create({
-      key: 'ship1_anim',
-      frames: this.anims.generateFrameNumbers('ship1'),
-      frameRate: 20,
-      repeat: -1,
-    })
-    this.anims.create({
-      key: 'ship2_anim',
-      frames: this.anims.generateFrameNumbers('ship2'),
-      frameRate: 20,
-      repeat: -1,
-    })
-    this.anims.create({
-      key: 'ship3_anim',
-      frames: this.anims.generateFrameNumbers('ship3'),
-      frameRate: 20,
-      repeat: -1,
-    })
-    this.anims.create({
-      key: 'explode',
-      frames: this.anims.generateFrameNumbers('explosion'),
-      frameRate: 20,
-      repeat: 0,
-      hideOnComplete: true,
-    })
-    this.anims.create({
-      key: 'red',
-      frames: this.anims.generateFrameNumbers('power-up', {
-        start: 0,
-        end: 1,
-      }),
-      frameRate: 20,
-      repeat: -1,
-    })
-    this.anims.create({
-      key: 'gray',
-      frames: this.anims.generateFrameNumbers('power-up', {
-        start: 2,
-        end: 3,
-      }),
-      frameRate: 20,
-      repeat: -1,
-    })
+    this.player = this.physics.add.sprite(GAME_CONFIG.width / 2, GAME_CONFIG.height / 2, 'player');
 
     this.ship1.play('ship1_anim');
     this.ship2.play('ship2_anim');
     this.ship3.play('ship3_anim');
 
+    this.player.play('thrust');
+    this.player.setCollideWorldBounds(true);
+
     this.ship1.setInteractive();
+    this.ship2.setInteractive();
+    this.ship3.setInteractive();
 
     this.input.on('gameobjectdown', this.destroyShip, this);
 
-    // power-ups
+    this.createPowerUps();
+    
+    this.cursorKeys = this.input.keyboard.createCursorKeys();
+    this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+  }
+  update() {
+    this.moveShip(this.ship1, 1);
+    this.moveShip(this.ship2, 2);
+    this.moveShip(this.ship3, 3);
 
+    this.background.tilePositionY -= 0.5;
+
+    this.playerMove();
+    if (Phaser.Input.Keyboard.JustDown(this.spacebar)) this.playerAttack();
+  }
+  playerMove() {
+    const cursorKey = this.cursorKeys;
+
+    if (!cursorKey.left.isDown) {
+      this.player.setVelocityX(0);
+    } 
+    if (!cursorKey.up.isDown) {
+      this.player.setVelocityY(0);
+    }
+
+    if (cursorKey.left.isDown) {
+      this.player.setVelocityX(-GAME_SETTINGS.playerSpeed);
+    } else if (cursorKey.right.isDown) {
+      this.player.setVelocityX(GAME_SETTINGS.playerSpeed);
+    }
+
+    if (cursorKey.up.isDown) {
+      this.player.setVelocityY(-GAME_SETTINGS.playerSpeed);
+    } else if (cursorKey.down.isDown) {
+      this.player.setVelocityY(GAME_SETTINGS.playerSpeed);
+    }
+  }
+  playerAttack() {
+    console.log('shoot')
+  }
+  createPowerUps() {
     this.powerUps = this.physics.add.group();
     for (let i = 0; i <= 4; i += 1) {
       let powerUp = this.physics.add.sprite(16,16, 'power-up');
@@ -80,13 +86,6 @@ class Scene2 extends Phaser.Scene {
       powerUp.setCollideWorldBounds(true);
       powerUp.setBounce(1);
     }
-  }
-  update() {
-    this.moveShip(this.ship1, 1);
-    this.moveShip(this.ship2, 2);
-    this.moveShip(this.ship3, 3);
-
-    this.background.tilePositionY -= 0.5;
   }
   moveShip(ship, speed) {
     if (ship.y > GAME_CONFIG.height) {

@@ -25,8 +25,6 @@ class Scene2 extends Phaser.Scene {
     this.ship2.setInteractive();
     this.ship3.setInteractive();
 
-    this.input.on('gameobjectdown', this.destroyShip, this);
-
     this.cursorKeys = this.input.keyboard.createCursorKeys();
     this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
@@ -114,16 +112,40 @@ class Scene2 extends Phaser.Scene {
     ship.x = this.getRandomPosition(GAME_CONFIG.width);
     ship.y = 0;
   }
-  destroyShip(pointer, gameObject) {
-    gameObject.setTexture('explosion');
-    gameObject.play('explode');
-  }
   destroyPlayer(player, enemy) {
     this.resetShip(enemy);
-    player.x = GAME_SETTINGS.defaultX;
-    player.y = GAME_SETTINGS.defaultY;
+    if (this.player.alpha >= 1) {
+      let explosion = new Explosion(this, player.x, player.y);
+      player.disableBody(true, true);
+      player.active = false;
+      this.time.addEvent({
+        delay: 1000,
+        callback: this.resetPlayer,
+        callbackScope: this,
+        loop: false
+      });
+    }
+  }
+  resetPlayer() {
+    let x = GAME_CONFIG.width / 2;
+    let y = GAME_CONFIG.height + 100;
+    this.player.enableBody(true, x, y, true, true);
+    this.player.alpha = 0.5;
+    let tween = this.tweens.add({
+      targets: this.player, 
+      y: GAME_CONFIG.height - 100, 
+      ease: 'Power1',
+      duration: 1500,
+      repeat: 0,
+      onComplete() {
+        this.player.active = true;
+        this.player.alpha = 1;
+      },
+      callbackScope: this,
+    })
   }
   destroyEnemy(beam, enemy) {
+    let explosion = new Explosion(this, enemy.x, enemy.y);
     beam.destroy();
     this.resetShip(enemy);
     this.updateScore();

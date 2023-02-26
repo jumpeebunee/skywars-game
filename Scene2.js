@@ -3,6 +3,8 @@ class Scene2 extends Phaser.Scene {
     super('playGame');
   }
   create() {
+    this.score = 0;
+
     this.background = this.add.tileSprite(0,0, GAME_CONFIG.width, GAME_CONFIG.height, 'background');
     this.background.setOrigin(0, 0);
 
@@ -42,6 +44,7 @@ class Scene2 extends Phaser.Scene {
     this.physics.add.overlap(this.beams, this.enemies, this.destroyEnemy, null, this);
 
     this.createPowerUps();
+    this.createScorePoint();
   }
   update() {
     this.moveShip(this.ship1, 1);
@@ -123,6 +126,7 @@ class Scene2 extends Phaser.Scene {
   destroyEnemy(beam, enemy) {
     beam.destroy();
     this.resetShip(enemy);
+    this.updateScore();
   }
   powerUpHit(beam) {
     beam.destroy();
@@ -130,7 +134,27 @@ class Scene2 extends Phaser.Scene {
   takePowerUp(player, powerUp) {
     powerUp.disableBody(true, true);
   }
+  updateScore() {
+    this.score += 12;
+    this.scoreText.text = `Score: ${this.getValidScore()}`
+  }
   getRandomPosition(max) {
     return Math.floor(Math.random() * (max - 0) + 0);
+  }
+  getValidScore() {
+    return this.score.toString().padStart(6, '0');
+  }
+  createScorePoint() {
+    let graphics = this.add.graphics();
+    graphics.fillStyle(0x000000, 1); 
+    graphics.beginPath();
+    graphics.moveTo(0, 0);
+    graphics.lineTo(GAME_CONFIG.width, 0);
+    graphics.lineTo(GAME_CONFIG.width, 20);
+    graphics.lineTo(0, 20)
+    graphics.lineTo(0, 0);
+    graphics.closePath();
+    graphics.fillPath();
+    this.scoreText = this.add.bitmapText(10, 5, 'pixelFont', `Score: ${this.getValidScore()}`, 16);
   }
 }

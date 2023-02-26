@@ -93,6 +93,7 @@ class Scene1 extends Phaser.Scene {
     })
   }
   preload() {
+    this.load.bitmapFont('pixelFont', './assets/font/font.png', './assets/font/font.xml');
     this.loadSprites();
     this.loadImages();
   }

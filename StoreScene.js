@@ -8,6 +8,7 @@ class StoreScene extends Phaser.Scene {
     }
   }
   create() {
+    console.log(GAME_SETTINGS.maxScore)
     this.background = this.add.tileSprite(0,0, GAME_CONFIG.width, GAME_CONFIG.height, 'background');
     this.background.setOrigin(0,0);
 
@@ -45,7 +46,9 @@ class StoreScene extends Phaser.Scene {
       stroke: 'white'
     })
     
-    if (GAME_SETTINGS.maxScore >= 800) this.scores.text = 'получено';
+    if (GAME_SETTINGS.maxScore >= 800 ){
+      this.scores.text = 'получено';
+    }
     if (GAME_SETTINGS.maxScore >= 1000) this.lives.text = 'получено';
     if (GAME_SETTINGS.maxScore >= 1200) this.speed.text = 'получено';
    

@@ -3,7 +3,7 @@ class Scene2 extends Phaser.Scene {
     super('playGame');
   }
   create() {
-    this.score = 0;
+    this.score = 390;
     this.ammo = 10;
     this.spipSpeed1 = 1;
     this.spipSpeed2 = 2;
@@ -75,7 +75,6 @@ class Scene2 extends Phaser.Scene {
           }
         }
       }
-
       this.playerMove();
       if (Phaser.Input.Keyboard.JustDown(this.spacebar)) this.playerAttack();
     }
@@ -140,13 +139,16 @@ class Scene2 extends Phaser.Scene {
     ship.y = 0;
   }
   destroyPlayer(player, enemy) {
-    if (this.lives === 0) {
-      this.scene.stop();
-      this.scene.start('menuGame');
-    }
     this.resetShip(enemy);
     this.explosionSound.play();
     if (this.player.alpha >= 1) {
+      if (this.lives === 0) {
+        if (this.score > GAME_SETTINGS.maxScore) {
+          GAME_SETTINGS.maxScore = this.score;
+        }
+        this.scene.stop();
+        this.scene.start('menuGame');
+      }
       let explosion = new Explosion(this, player.x, player.y);
       player.disableBody(true, true);
       player.active = false;
@@ -215,12 +217,13 @@ class Scene2 extends Phaser.Scene {
     this.ammoText.text = `Ammo: ${this.ammo}`
   }
   updateScore() {
-    if (this.score % 200 === 0) {
-      this.spipSpeed1 += 0.5;
-      this.spipSpeed2 += 0.5;
-      this.spipSpeed3 += 0.5;
+    if (this.score % 400 === 0) {
+      console.log(this.spipSpeed1)
+      this.spipSpeed1 += 1;
+      this.spipSpeed2 += 1;
+      this.spipSpeed3 += 1;
     } 
-    this.score += 10;
+    this.score += GAME_SETTINGS.points;
     this.scoreText.text = `Score: ${this.getValidScore()}`
   }
   updateLives() {

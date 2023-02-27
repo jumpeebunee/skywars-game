@@ -22,6 +22,10 @@ class MenuScene extends Phaser.Scene {
     this.playBtn.setInteractive();
     this.storeBtn.setInteractive();
     this.input.on('gameobjectdown', this.startGame, this);
+
+    if (GAME_SETTINGS.maxScore >= 800) GAME_SETTINGS.points = 20;
+    if (GAME_SETTINGS.maxScore >= 1000) GAME_SETTINGS.lives = 5;
+    if (GAME_SETTINGS.maxScore >= 1200) GAME_SETTINGS.playerSpeed = 150;
   }
   update() {
     this.background.tilePositionY -= 0.5;

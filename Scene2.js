@@ -3,8 +3,11 @@ class Scene2 extends Phaser.Scene {
     super('playGame');
   }
   create() {
-    this.score = 0;
+    this.score = 190;
     this.ammo = 10;
+    this.spipSpeed1 = 1;
+    this.spipSpeed2 = 2;
+    this.spipSpeed3 = 3;
 
     this.background = this.add.tileSprite(0,0, GAME_CONFIG.width, GAME_CONFIG.height, 'background');
     this.background.setOrigin(0, 0);
@@ -40,6 +43,7 @@ class Scene2 extends Phaser.Scene {
 
       this.powerUps = this.physics.add.group();
       this.beams = this.add.group();
+      this.ships = this.add.group();
       this.enemies = this.physics.add.group();
 
       this.enemies.add(this.ship1);
@@ -58,14 +62,15 @@ class Scene2 extends Phaser.Scene {
   }
   update() {
     if (this.isStarted) {
-      this.moveShip(this.ship1, 1);
-      this.moveShip(this.ship2, 2);
-      this.moveShip(this.ship3, 3);
+      this.moveShip(this.ship1, this.spipSpeed1);
+      this.moveShip(this.ship2, this.spipSpeed2);
+      this.moveShip(this.ship3, this.spipSpeed3);
 
       for (let i = 0; i < this.beams.getChildren().length; i += 1) {
         let beam = this.beams.getChildren()[i];
         beam.update();
       }
+
       this.playerMove();
       if (Phaser.Input.Keyboard.JustDown(this.spacebar)) this.playerAttack();
     }
@@ -200,7 +205,12 @@ class Scene2 extends Phaser.Scene {
     this.ammoText.text = `Ammo: ${this.ammo}`
   }
   updateScore() {
-    this.score += 12;
+    if (this.score % 200 === 0) {
+      this.spipSpeed1 += 0.5;
+      this.spipSpeed2 += 0.5;
+      this.spipSpeed3 += 0.5;
+    } 
+    this.score += 10;
     this.scoreText.text = `Score: ${this.getValidScore()}`
   }
   getRandomPosition(max) {

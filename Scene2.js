@@ -217,8 +217,7 @@ class Scene2 extends Phaser.Scene {
     this.ammoText.text = `Ammo: ${this.ammo}`
   }
   updateScore() {
-    if (this.score % 400 === 0) {
-      console.log(this.spipSpeed1)
+    if (this.score % 400 === 0 && this.score !== 0) {
       this.spipSpeed1 += 1;
       this.spipSpeed2 += 1;
       this.spipSpeed3 += 1;

@@ -15,6 +15,8 @@ const GAME_SETTINGS = {
   playerSpeed: 100,
   defaultX: GAME_CONFIG.width / 2,
   defaultY: GAME_CONFIG.height / 2 + 75,
+  lives: 3,
+  maxScore: 0,
 }
 
 const MUSIC_CONFIG = {

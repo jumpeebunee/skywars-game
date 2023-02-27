@@ -13,7 +13,6 @@ class MenuScene extends Phaser.Scene {
     this.musicBtn = this.add.sprite(GAME_CONFIG.width / 2 - 55, GAME_CONFIG.height / 2, 'musicGameBtn');
     this.storeBtn = this.add.sprite(GAME_CONFIG.width / 2 + 55, GAME_CONFIG.height / 2, 'storeGameBtn');
 
-
     this.cursorKeys = this.input.keyboard.createCursorKeys();
     this.playBtn.setInteractive();
     this.input.on('gameobjectdown', this.startGame, this);

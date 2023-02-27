@@ -3,11 +3,12 @@ class Scene2 extends Phaser.Scene {
     super('playGame');
   }
   create() {
-    this.score = 190;
+    this.score = 0;
     this.ammo = 10;
     this.spipSpeed1 = 1;
     this.spipSpeed2 = 2;
     this.spipSpeed3 = 3;
+    this.lives = GAME_SETTINGS.lives;
 
     this.background = this.add.tileSprite(0,0, GAME_CONFIG.width, GAME_CONFIG.height, 'background');
     this.background.setOrigin(0, 0);
@@ -66,9 +67,13 @@ class Scene2 extends Phaser.Scene {
       this.moveShip(this.ship2, this.spipSpeed2);
       this.moveShip(this.ship3, this.spipSpeed3);
 
-      for (let i = 0; i < this.beams.getChildren().length; i += 1) {
-        let beam = this.beams.getChildren()[i];
-        beam.update();
+      if (this.beams.children) {
+        if (this.beams.getChildren().length) {
+          for (let i = 0; i < this.beams.getChildren().length; i += 1) {
+            let beam = this.beams.getChildren()[i];
+            beam.update();
+          }
+        }
       }
 
       this.playerMove();
@@ -135,12 +140,17 @@ class Scene2 extends Phaser.Scene {
     ship.y = 0;
   }
   destroyPlayer(player, enemy) {
+    if (this.lives === 0) {
+      this.scene.stop();
+      this.scene.start('menuGame');
+    }
     this.resetShip(enemy);
     this.explosionSound.play();
     if (this.player.alpha >= 1) {
       let explosion = new Explosion(this, player.x, player.y);
       player.disableBody(true, true);
       player.active = false;
+      this.updateLives();
       this.time.addEvent({
         delay: 1000,
         callback: this.resetPlayer,
@@ -213,6 +223,10 @@ class Scene2 extends Phaser.Scene {
     this.score += 10;
     this.scoreText.text = `Score: ${this.getValidScore()}`
   }
+  updateLives() {
+    this.lives -= 1;
+    this.livesText.text = `${this.lives}`
+  }
   getRandomPosition(max) {
     return Math.floor(Math.random() * (max - 0) + 0);
   }
@@ -232,5 +246,8 @@ class Scene2 extends Phaser.Scene {
     graphics.fillPath();
     this.scoreText = this.add.bitmapText(10, 5, 'pixelFont', `Score: ${this.getValidScore()}`, 16);
     this.ammoText = this.add.bitmapText(195, 5, 'pixelFont', `Ammo: ${this.ammo}`, 16);
+
+    this.heartLives = this.add.sprite(165, 10, 'heart');
+    this.livesText = this.add.bitmapText(175, 5, 'pixelFont', `${this.lives}`, 16);
   }
 }

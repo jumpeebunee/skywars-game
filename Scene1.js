@@ -43,6 +43,10 @@ class Scene1 extends Phaser.Scene {
       frameWidth: 40,
       frameHeight: 40,
     })
+    this.load.spritesheet('heart', './assets/spritesheets/heart.png', {
+      frameWidth: 16,
+      frameHeight: 16,
+    })
   }
   loadImages() {
     this.load.image('background', './assets/background.png');
@@ -118,6 +122,6 @@ class Scene1 extends Phaser.Scene {
   }
   create() {
     this.createAnimation();
-    this.scene.start('playGame');
+    this.scene.start('menuGame');
   }
 }

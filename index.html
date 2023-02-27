@@ -4,16 +4,26 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style media='screen' type='text/css'>
+    @font-face {
+      font-family: font1;
+      src: url('./assets/font/PressStart2P-Regular.ttf');
+      font-weight:400;
+      font-weight:normal;
+    }
+</style>
   <script src="phaser.min.js"></script>
   <script src="Scene1.js"></script>
   <script src="Scene2.js"></script>
   <script src="MenuScene.js"></script>
   <script src="beam.js"></script>
   <script src="explosion.js"></script>
+  <script src="FontLoader.js"></script>
   <script src="game.js"></script>
   <link rel="stylesheet" href="style.css">
   <title>Skywars game</title>
 </head>
 <body>
+  <div style="font-family:font1; position:absolute; left:-1000px; visibility:hidden;">.</div>
 </body>
 </html>

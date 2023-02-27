@@ -8,6 +8,14 @@ class MenuScene extends Phaser.Scene {
       this.scene.start('playGame');
     } else if (btn.texture.key === 'storeGameBtn') {
       this.scene.start('storeGame');
+    } else {
+      if (!this.music.mute) {
+        this.musicBtn.setTexture('musicGameBtnDisabled')
+      } else {
+        this.musicBtn.setTexture('musicGameBtn')
+      }
+      this.music.mute = !this.music.mute;
+      MUSIC_CONFIG.mute = !MUSIC_CONFIG.mute;
     }
   }
   create() {
@@ -20,9 +28,7 @@ class MenuScene extends Phaser.Scene {
             console.log(error)
           }
       }
-      
   })
-
 
     this.background = this.add.tileSprite(0,0, GAME_CONFIG.width, GAME_CONFIG.height, 'background');
     this.background.setOrigin(0,0);
@@ -35,6 +41,7 @@ class MenuScene extends Phaser.Scene {
 
     this.playBtn.setInteractive();
     this.storeBtn.setInteractive();
+    this.musicBtn.setInteractive();
     this.input.on('gameobjectdown', this.startGame, this);
 
     if (GAME_SETTINGS.maxScore >= 800) GAME_SETTINGS.points = 20;

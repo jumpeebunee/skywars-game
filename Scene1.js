@@ -43,6 +43,10 @@ class Scene1 extends Phaser.Scene {
       frameWidth: 40,
       frameHeight: 40,
     })
+    this.load.spritesheet('musicGameBtnDisabled', './assets/spritesheets/musicBtnDisabled.png', {
+      frameWidth: 40,
+      frameHeight: 40,
+    })
     this.load.spritesheet('storeGameBtn', './assets/spritesheets/storeBtn.png', {
       frameWidth: 40,
       frameHeight: 40,

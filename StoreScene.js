@@ -25,7 +25,6 @@ class StoreScene extends Phaser.Scene {
     }
   }
   create() {
-    
     ysdk.feedback.canReview()
       .then((data) => {
         if (data.value) {

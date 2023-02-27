@@ -4,6 +4,7 @@ class Scene2 extends Phaser.Scene {
   }
   create() {
     this.score = 0;
+    this.ammo = 10;
 
     this.background = this.add.tileSprite(0,0, GAME_CONFIG.width, GAME_CONFIG.height, 'background');
     this.background.setOrigin(0, 0);
@@ -70,7 +71,6 @@ class Scene2 extends Phaser.Scene {
     }
 
     this.background.tilePositionY -= 0.5;
-
   }
   playerMove() {
     const cursorKey = this.cursorKeys;
@@ -95,8 +95,11 @@ class Scene2 extends Phaser.Scene {
     }
   }
   playerAttack() {
+    if (this.ammo === 0) return;
     let beam = new Beam(this);
     this.beamSound.play();
+    this.ammo -= 1;
+    this.updateAmmo();
   }
   createPowerUps() {
     for (let i = 0; i <= 4; i += 1) {
@@ -170,8 +173,31 @@ class Scene2 extends Phaser.Scene {
     beam.destroy();
   }
   takePowerUp(player, powerUp) {
+    if (powerUp.anims.currentAnim.key === 'gray') {
+      this.ammo += 3;
+      this.updateAmmo();
+    } else if (powerUp.anims.currentAnim.key === 'red') {
+      this.updateScore();
+    }
     this.pickupSound.play();
     powerUp.disableBody(true, true);
+    this.activatePowerUp(powerUp);
+  }
+  activatePowerUp(powerUp) {
+    setTimeout(() => {
+      powerUp.enableBody(true, 0,0, true, true);
+      powerUp.setRandomPosition(0,0, GAME_CONFIG.width, GAME_CONFIG.height);
+      powerUp.setVelocity(100, 100);
+
+      if (Math.random() > 0.5) {
+        powerUp.play('red')
+      } else {
+        powerUp.play('gray');
+      }
+    }, 3000);
+  }
+  updateAmmo() {
+    this.ammoText.text = `Ammo: ${this.ammo}`
   }
   updateScore() {
     this.score += 12;
@@ -195,5 +221,6 @@ class Scene2 extends Phaser.Scene {
     graphics.closePath();
     graphics.fillPath();
     this.scoreText = this.add.bitmapText(10, 5, 'pixelFont', `Score: ${this.getValidScore()}`, 16);
+    this.ammoText = this.add.bitmapText(195, 5, 'pixelFont', `Ammo: ${this.ammo}`, 16);
   }
 }

@@ -118,6 +118,6 @@ class Scene1 extends Phaser.Scene {
   }
   create() {
     this.createAnimation();
-    this.scene.start('menuGame');
+    this.scene.start('playGame');
   }
 }

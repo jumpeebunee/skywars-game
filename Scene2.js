@@ -8,38 +8,10 @@ class Scene2 extends Phaser.Scene {
     this.background = this.add.tileSprite(0,0, GAME_CONFIG.width, GAME_CONFIG.height, 'background');
     this.background.setOrigin(0, 0);
 
-    this.ship1 = this.add.sprite(GAME_CONFIG.width / 2 - 50, GAME_CONFIG.height / 2, 'ship1');
-    this.ship2 = this.add.sprite(GAME_CONFIG.width / 2, GAME_CONFIG.height / 2, 'ship2');
-    this.ship3 = this.add.sprite(GAME_CONFIG.width / 2 + 50, GAME_CONFIG.height / 2, 'ship3');
-
     this.player = this.physics.add.sprite(GAME_SETTINGS.defaultX, GAME_SETTINGS.defaultY, 'player');
-
-    this.ship1.play('ship1_anim');
-    this.ship2.play('ship2_anim');
-    this.ship3.play('ship3_anim');
 
     this.player.play('thrust');
     this.player.setCollideWorldBounds(true);
-
-    this.ship1.setInteractive();
-    this.ship2.setInteractive();
-    this.ship3.setInteractive();
-
-    this.cursorKeys = this.input.keyboard.createCursorKeys();
-    this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-
-    this.powerUps = this.physics.add.group();
-    this.beams = this.add.group();
-    this.enemies = this.physics.add.group();
-
-    this.enemies.add(this.ship1);
-    this.enemies.add(this.ship2);
-    this.enemies.add(this.ship3);
-
-    this.physics.add.collider(this.beams, this.powerUps, this.powerUpHit)
-    this.physics.add.overlap(this.player, this.powerUps, this.takePowerUp, null, this);
-    this.physics.add.overlap(this.player, this.enemies, this.destroyPlayer, null, this);
-    this.physics.add.overlap(this.beams, this.enemies, this.destroyEnemy, null, this);
 
     this.music = this.sound.add('music');
     this.beamSound = this.sound.add('beam_sound');
@@ -47,23 +19,58 @@ class Scene2 extends Phaser.Scene {
     this.pickupSound = this.sound.add('pickup_sound');
     this.music.play(MUSIC_CONFIG);
 
-    this.createPowerUps();
     this.createScorePoint();
+  
+    setTimeout(() => {
+      this.ship1 = this.add.sprite(this.getRandomPosition(GAME_CONFIG.width), 0, 'ship1');
+      this.ship2 = this.add.sprite(this.getRandomPosition(GAME_CONFIG.width), 0, 'ship2');
+      this.ship3 = this.add.sprite(this.getRandomPosition(GAME_CONFIG.width), 0, 'ship3');
+    
+      this.ship1.play('ship1_anim');
+      this.ship2.play('ship2_anim');
+      this.ship3.play('ship3_anim');
+
+      this.ship1.setInteractive();
+      this.ship2.setInteractive();
+      this.ship3.setInteractive();
+
+      this.cursorKeys = this.input.keyboard.createCursorKeys();
+      this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+
+      this.powerUps = this.physics.add.group();
+      this.beams = this.add.group();
+      this.enemies = this.physics.add.group();
+
+      this.enemies.add(this.ship1);
+      this.enemies.add(this.ship2);
+      this.enemies.add(this.ship3);
+
+      this.physics.add.collider(this.beams, this.powerUps, this.powerUpHit)
+      this.physics.add.overlap(this.player, this.powerUps, this.takePowerUp, null, this);
+      this.physics.add.overlap(this.player, this.enemies, this.destroyPlayer, null, this);
+      this.physics.add.overlap(this.beams, this.enemies, this.destroyEnemy, null, this);
+
+      this.createPowerUps();
+
+      this.isStarted = true;
+    }, 1000);
   }
   update() {
-    this.moveShip(this.ship1, 1);
-    this.moveShip(this.ship2, 2);
-    this.moveShip(this.ship3, 3);
+    if (this.isStarted) {
+      this.moveShip(this.ship1, 1);
+      this.moveShip(this.ship2, 2);
+      this.moveShip(this.ship3, 3);
+
+      for (let i = 0; i < this.beams.getChildren().length; i += 1) {
+        let beam = this.beams.getChildren()[i];
+        beam.update();
+      }
+      this.playerMove();
+      if (Phaser.Input.Keyboard.JustDown(this.spacebar)) this.playerAttack();
+    }
 
     this.background.tilePositionY -= 0.5;
 
-    this.playerMove();
-    if (Phaser.Input.Keyboard.JustDown(this.spacebar)) this.playerAttack();
-
-    for (let i = 0; i < this.beams.getChildren().length; i += 1) {
-      let beam = this.beams.getChildren()[i];
-      beam.update();
-    }
   }
   playerMove() {
     const cursorKey = this.cursorKeys;

@@ -1,7 +1,7 @@
 const GAME_CONFIG = {
   width: 256,
   height: 272,
-  scene: [Scene1, Scene2],
+  scene: [Scene1, MenuScene, Scene2],
   pixelArt: true,
   physics: {
     default: 'arcade',
@@ -19,7 +19,7 @@ const GAME_SETTINGS = {
 
 const MUSIC_CONFIG = {
   mute: false,
-  volume: 1,
+  volume: 0.1,
   rate: 1,
   detune: 1,
   seek: 0,
@@ -27,4 +27,8 @@ const MUSIC_CONFIG = {
   delay: 0,
 }
 
-let game = new Phaser.Game(GAME_CONFIG);
+document.addEventListener("DOMContentLoaded", function(event) {
+  let game = new Phaser.Game(GAME_CONFIG);
+  let a = document.getElementsByTagName('canvas');
+  a[0].classList.add('game')
+})

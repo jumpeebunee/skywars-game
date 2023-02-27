@@ -31,6 +31,18 @@ class Scene1 extends Phaser.Scene {
       frameWidth: 16,
       frameHeight: 16,
     })
+    this.load.spritesheet('playGameBtn', './assets/spritesheets/playBtn.png', {
+      frameWidth: 54,
+      frameHeight: 54,
+    })
+    this.load.spritesheet('musicGameBtn', './assets/spritesheets/musicBtn.png', {
+      frameWidth: 40,
+      frameHeight: 40,
+    })
+    this.load.spritesheet('storeGameBtn', './assets/spritesheets/storeBtn.png', {
+      frameWidth: 40,
+      frameHeight: 40,
+    })
   }
   loadImages() {
     this.load.image('background', './assets/background.png');
@@ -106,6 +118,6 @@ class Scene1 extends Phaser.Scene {
   }
   create() {
     this.createAnimation();
-    this.scene.start('playGame');
+    this.scene.start('menuGame');
   }
 }

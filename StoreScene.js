@@ -13,6 +13,7 @@ class StoreScene extends Phaser.Scene {
             },
             onRewarded: () => {
               GAME_SETTINGS.blackSkin = true;
+              this.scene.start('menuGame');
             },
             onClose: () => {
               console.log('Video ad closed.');
@@ -29,7 +30,7 @@ class StoreScene extends Phaser.Scene {
       .then((data) => {
         if (data.value) {
           ysdk.feedback.requestReview().then((resData) => {
-            console.log(resData.feedbackSent );
+            console.log(resData.feedbackSent);
           })
         }
       })

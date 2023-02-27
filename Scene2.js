@@ -32,7 +32,7 @@ class Scene2 extends Phaser.Scene {
     
     this.createScorePoint();
 
-    this.mql = window.matchMedia('(max-width: 1000px)');
+    this.mql = window.matchMedia('(max-width: 1280px)');
 
     setTimeout(() => {
       this.ship1 = this.add.sprite(this.getRandomPosition(GAME_CONFIG.width), 0, 'ship1');
@@ -270,7 +270,7 @@ class Scene2 extends Phaser.Scene {
     this.ammoText.text = `Ammo: ${this.ammo}`
   }
   updateScore() {
-    if (this.score % 400 === 0 && this.score !== 0) {
+    if (this.score % 500 === 0 && this.score !== 0) {
       this.spipSpeed1 += 1;
       this.spipSpeed2 += 1;
       this.spipSpeed3 += 1;

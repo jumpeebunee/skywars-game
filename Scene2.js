@@ -13,16 +13,22 @@ class Scene2 extends Phaser.Scene {
     this.background = this.add.tileSprite(0,0, GAME_CONFIG.width, GAME_CONFIG.height, 'background');
     this.background.setOrigin(0, 0);
 
-    this.player = this.physics.add.sprite(GAME_SETTINGS.defaultX, GAME_SETTINGS.defaultY, 'player');
+    if (GAME_SETTINGS.blackSkin) {
+      this.player = this.physics.add.sprite(GAME_SETTINGS.defaultX, GAME_SETTINGS.defaultY, 'player2');
+      this.player.play('thrust2');
+    } else {
+      this.player = this.physics.add.sprite(GAME_SETTINGS.defaultX, GAME_SETTINGS.defaultY, 'player');
+      this.player.play('thrust');
+    }
 
-    this.player.play('thrust');
     this.player.setCollideWorldBounds(true);
 
-    this.music = this.sound.add('music');
     this.beamSound = this.sound.add('beam_sound');
     this.explosionSound = this.sound.add('explosion_sound');
     this.pickupSound = this.sound.add('pickup_sound');
-    this.music.play(MUSIC_CONFIG);
+
+    if (!this.music) this.music = this.sound.add('gameMusic');
+    if (!this.music.isPlaying) this.music.play(MUSIC_CONFIG);
 
     this.createScorePoint();
   
@@ -146,6 +152,7 @@ class Scene2 extends Phaser.Scene {
         if (this.score > GAME_SETTINGS.maxScore) {
           GAME_SETTINGS.maxScore = this.score;
         }
+        this.music.stop();
         this.scene.stop();
         this.scene.start('menuGame');
       }
@@ -163,12 +170,12 @@ class Scene2 extends Phaser.Scene {
   }
   resetPlayer() {
     let x = GAME_CONFIG.width / 2;
-    let y = GAME_CONFIG.height + 100;
+    let y = GAME_CONFIG.height + 50;
     this.player.enableBody(true, x, y, true, true);
     this.player.alpha = 0.5;
     let tween = this.tweens.add({
       targets: this.player, 
-      y: GAME_CONFIG.height - 100, 
+      y: GAME_CONFIG.height - 50, 
       ease: 'Power1',
       duration: 1500,
       repeat: 0,

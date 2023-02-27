@@ -27,6 +27,10 @@ class Scene1 extends Phaser.Scene {
       frameWidth: 16,
       frameHeight: 24,
     })
+    this.load.spritesheet('player2', './assets/spritesheets/player2.png', {
+      frameWidth: 16,
+      frameHeight: 24,
+    })
     this.load.spritesheet('beam','./assets/spritesheets/beam.png', {
       frameWidth: 16,
       frameHeight: 16,
@@ -53,6 +57,8 @@ class Scene1 extends Phaser.Scene {
   }
   loadSounds() {
     this.load.audio('music', ['./assets/sounds/sci-fi_platformer12.ogg', './assets/sounds/sci-fi_platformer12.mp3']);
+    this.load.audio('mainMusic', ['./assets/sounds/mainMenu.ogg', './assets/sounds/mainMenu.mp3']);
+    this.load.audio('gameMusic', ['./assets/sounds/gameMusic.ogg', './assets/sounds/gameMusic.mp3']);
     this.load.audio('beam_sound', ['./assets/sounds/beam.ogg', './assets/sounds/beam.mp3']);
     this.load.audio('explosion_sound', ['./assets/sounds/explosion.ogg', './assets/sounds/explosion.mp3']);
     this.load.audio('pickup_sound', ['./assets/sounds/pickup.ogg', './assets/sounds/pickup.mp3']);
@@ -104,6 +110,12 @@ class Scene1 extends Phaser.Scene {
     this.anims.create({
       key: 'thrust',
       frames: this.anims.generateFrameNumbers('player'),
+      frameRate: 20,
+      repeat: -1,
+    })
+    this.anims.create({
+      key: 'thrust2',
+      frames: this.anims.generateFrameNumbers('player2'),
       frameRate: 20,
       repeat: -1,
     })

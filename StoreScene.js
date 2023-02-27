@@ -5,9 +5,36 @@ class StoreScene extends Phaser.Scene {
   storeEvents(click, btn) {
     if (btn._text === 'Назад') {
       this.scene.start('menuGame');
+    } else if (btn._text === 'забрать') {
+      ysdk.adv.showRewardedVideo({
+        callbacks: {
+            onOpen: () => {
+              console.log('Video ad open.');
+            },
+            onRewarded: () => {
+              GAME_SETTINGS.blackSkin = true;
+            },
+            onClose: () => {
+              console.log('Video ad closed.');
+            }, 
+            onError: (e) => {
+              console.log('Error while open video ad:', e);
+            }
+        }
+    })
     }
   }
   create() {
+    
+    ysdk.feedback.canReview()
+      .then((data) => {
+        if (data.value) {
+          ysdk.feedback.requestReview().then((resData) => {
+            console.log(resData.feedbackSent );
+          })
+        }
+      })
+
     this.background = this.add.tileSprite(0,0, GAME_CONFIG.width, GAME_CONFIG.height, 'background');
     this.background.setOrigin(0,0);
 
@@ -41,11 +68,6 @@ class StoreScene extends Phaser.Scene {
       font: '12px font1',
       stroke: 'white'
     })
-    
-    if (GAME_SETTINGS.maxScore >= 800 ) this.scores.text = 'получено';
-    if (GAME_SETTINGS.maxScore >= 1000) this.lives.text = 'получено';
-    if (GAME_SETTINGS.maxScore >= 1200) this.speed.text = 'получено';
-   
     this.ship = this.add.text(130, 125, 'забрать', {
       font: '12px font1',
       stroke: 'white'
@@ -53,8 +75,15 @@ class StoreScene extends Phaser.Scene {
     this.back = this.add.text(GAME_CONFIG.width / 2 - 40, GAME_CONFIG.height - 40, 'Назад', {
       font: '12px font1'
     })
+    
+    if (GAME_SETTINGS.maxScore >= 800 ) this.scores.text = 'получено';
+    if (GAME_SETTINGS.maxScore >= 1000) this.lives.text = 'получено';
+    if (GAME_SETTINGS.maxScore >= 1200) this.speed.text = 'получено';
+    if (GAME_SETTINGS.blackSkin) this.ship.text = 'получено';
+   
 
     this.back.setInteractive();
+    this.ship.setInteractive();
     this.input.on('gameobjectdown', this.storeEvents, this);
   }
   update() {

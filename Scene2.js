@@ -29,9 +29,11 @@ class Scene2 extends Phaser.Scene {
 
     if (!this.music) this.music = this.sound.add('gameMusic');
     if (!this.music.isPlaying) this.music.play(MUSIC_CONFIG);
-
+    
     this.createScorePoint();
-  
+
+    this.mql = window.matchMedia('(max-width: 1000px)');
+
     setTimeout(() => {
       this.ship1 = this.add.sprite(this.getRandomPosition(GAME_CONFIG.width), 0, 'ship1');
       this.ship2 = this.add.sprite(this.getRandomPosition(GAME_CONFIG.width), 0, 'ship2');
@@ -65,6 +67,23 @@ class Scene2 extends Phaser.Scene {
       this.createPowerUps();
 
       this.isStarted = true;
+
+      this.isMove = '';
+      if (this.mql.matches) {
+        this.mLeft = this.add.sprite(GAME_CONFIG.width / 2 - 30, GAME_CONFIG.height - 20, 'mLeft');
+        this.mRight = this.add.sprite(GAME_CONFIG.width / 2 + 30 , GAME_CONFIG.height - 20, 'mRight');
+        this.mUp = this.add.sprite(GAME_CONFIG.width / 2, GAME_CONFIG.height -  50, 'mUp');
+        this.mDown = this.add.sprite(GAME_CONFIG.width / 2, GAME_CONFIG.height - 20, 'mDown');
+        this.mShoot = this.add.sprite(GAME_CONFIG.width / 2 + 60 , GAME_CONFIG.height - 20, 'mShoot');
+    
+        this.input.on('gameobjectdown', this.moveMent, this);
+    
+        this.mLeft.setInteractive();
+        this.mRight.setInteractive();
+        this.mUp.setInteractive();
+        this.mDown.setInteractive();
+        this.mShoot.setInteractive();
+      }
     }, 1000);
   }
   update() {
@@ -88,6 +107,7 @@ class Scene2 extends Phaser.Scene {
     this.background.tilePositionY -= 0.5;
   }
   playerMove() {
+
     const cursorKey = this.cursorKeys;
 
     if (!cursorKey.left.isDown) {
@@ -99,14 +119,40 @@ class Scene2 extends Phaser.Scene {
 
     if (cursorKey.left.isDown) {
       this.player.setVelocityX(-GAME_SETTINGS.playerSpeed);
+      this.isMove = null;
     } else if (cursorKey.right.isDown) {
       this.player.setVelocityX(GAME_SETTINGS.playerSpeed);
+      this.isMove = null;
     }
 
     if (cursorKey.up.isDown) {
       this.player.setVelocityY(-GAME_SETTINGS.playerSpeed);
+      this.isMove = null;
     } else if (cursorKey.down.isDown) {
       this.player.setVelocityY(GAME_SETTINGS.playerSpeed);
+      this.isMove = null;
+    }
+
+    if (this.isMove === 'left') {
+      this.player.setVelocityX(-GAME_SETTINGS.playerSpeed);
+    } else if (this.isMove === 'right') {
+      this.player.setVelocityX(GAME_SETTINGS.playerSpeed);
+    } else if (this.isMove === 'up') {
+      this.player.setVelocityY(-GAME_SETTINGS.playerSpeed);
+    } else if (this.isMove === 'down') {
+      this.player.setVelocityY(GAME_SETTINGS.playerSpeed);
+    }
+  }
+  moveMent(click, btn) {
+    if (btn.texture.key === 'mShoot') this.playerAttack();
+    if (btn.texture.key === 'mLeft') {
+      this.isMove = 'left';
+    } else if (btn.texture.key === 'mRight') {
+      this.isMove = 'right';
+    } else if (btn.texture.key === 'mUp') {
+      this.isMove = 'up';
+    } else if (btn.texture.key === 'mDown') {
+      this.isMove = 'down';
     }
   }
   playerAttack() {

@@ -55,6 +55,26 @@ class Scene1 extends Phaser.Scene {
       frameWidth: 16,
       frameHeight: 16,
     })
+    this.load.spritesheet('mLeft', './assets/spritesheets/m-left.png', {
+      frameWidth: 24,
+      frameHeight: 24,
+    })
+    this.load.spritesheet('mRight', './assets/spritesheets/m-right.png', {
+      frameWidth: 24,
+      frameHeight: 24,
+    })
+    this.load.spritesheet('mUp', './assets/spritesheets/m-up.png', {
+      frameWidth: 24,
+      frameHeight: 24,
+    })
+    this.load.spritesheet('mDown', './assets/spritesheets/m-down.png', {
+      frameWidth: 24,
+      frameHeight: 24,
+    })
+    this.load.spritesheet('mShoot', './assets/spritesheets/m-shoot.png', {
+      frameWidth: 24,
+      frameHeight: 24,
+    })
   }
   loadImages() {
     this.load.image('background', './assets/background.png');

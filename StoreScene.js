@@ -8,7 +8,6 @@ class StoreScene extends Phaser.Scene {
     }
   }
   create() {
-    console.log(GAME_SETTINGS.maxScore)
     this.background = this.add.tileSprite(0,0, GAME_CONFIG.width, GAME_CONFIG.height, 'background');
     this.background.setOrigin(0,0);
 
@@ -30,25 +29,20 @@ class StoreScene extends Phaser.Scene {
     this.add.text(30, 125, 'Корабль:', {
       font: '12px font1'
     })
-
     this.scores = this.add.text(120, 65, '800p', {
       font: '12px font1',
       stroke: 'white'
     })
-
     this.lives = this.add.text(110, 85, '1000p', {
       font: '12px font1',
       stroke: 'white'
     })
-
     this.speed = this.add.text(140, 105, '1200p', {
       font: '12px font1',
       stroke: 'white'
     })
     
-    if (GAME_SETTINGS.maxScore >= 800 ){
-      this.scores.text = 'получено';
-    }
+    if (GAME_SETTINGS.maxScore >= 800 ) this.scores.text = 'получено';
     if (GAME_SETTINGS.maxScore >= 1000) this.lives.text = 'получено';
     if (GAME_SETTINGS.maxScore >= 1200) this.speed.text = 'получено';
    

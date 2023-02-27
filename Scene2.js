@@ -3,7 +3,7 @@ class Scene2 extends Phaser.Scene {
     super('playGame');
   }
   create() {
-    this.score = 390;
+    this.score = 0;
     this.ammo = 10;
     this.spipSpeed1 = 1;
     this.spipSpeed2 = 2;
@@ -222,6 +222,7 @@ class Scene2 extends Phaser.Scene {
       this.spipSpeed1 += 1;
       this.spipSpeed2 += 1;
       this.spipSpeed3 += 1;
+      this.background.tilePositionY -= 0.5;
     } 
     this.score += GAME_SETTINGS.points;
     this.scoreText.text = `Score: ${this.getValidScore()}`

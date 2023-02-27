@@ -1,7 +1,7 @@
 const GAME_CONFIG = {
   width: 256,
   height: 272,
-  scene: [Scene1, MenuScene, Scene2],
+  scene: [Scene1, MenuScene, Scene2, StoreScene],
   pixelArt: true,
   physics: {
     default: 'arcade',
@@ -16,7 +16,7 @@ const GAME_SETTINGS = {
   defaultX: GAME_CONFIG.width / 2,
   defaultY: GAME_CONFIG.height / 2 + 75,
   lives: 3,
-  maxScore: 0,
+  maxScore: 1200,
 }
 
 const MUSIC_CONFIG = {

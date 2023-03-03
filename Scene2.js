@@ -267,7 +267,7 @@ class Scene2 extends Phaser.Scene {
     }, 3000);
   }
   updateAmmo() {
-    this.ammoText.text = `Ammo: ${this.ammo}`
+    this.ammoText.text = `Патроны: ${this.ammo}`
   }
   updateScore() {
     if (this.score % 500 === 0 && this.score !== 0) {
@@ -277,7 +277,7 @@ class Scene2 extends Phaser.Scene {
       this.background.tilePositionY -= 0.5;
     } 
     this.score += GAME_SETTINGS.points;
-    this.scoreText.text = `Score: ${this.getValidScore()}`
+    this.scoreText.text = `Очки:${this.getValidScore()}`
   }
   updateLives() {
     this.lives -= 1;
@@ -300,10 +300,18 @@ class Scene2 extends Phaser.Scene {
     graphics.lineTo(0, 0);
     graphics.closePath();
     graphics.fillPath();
-    this.scoreText = this.add.bitmapText(10, 5, 'pixelFont', `Score: ${this.getValidScore()}`, 16);
-    this.ammoText = this.add.bitmapText(195, 5, 'pixelFont', `Ammo: ${this.ammo}`, 16);
-
-    this.heartLives = this.add.sprite(165, 10, 'heart');
-    this.livesText = this.add.bitmapText(175, 5, 'pixelFont', `${this.lives}`, 16);
+    this.scoreText = this.add.text(10, 5, `Очки: ${this.getValidScore()}`, {
+      font: '7px font1',
+      stroke: 'white'
+    })
+    this.ammoText = this.add.text(175, 5, `Патроны:${this.ammo}`, {
+      font: '7px font1',
+      stroke: 'white'
+    })
+    this.livesText = this.add.text(155, 5, `${this.lives}`, {
+      font: '7px font1',
+      stroke: 'white'
+    })
+    this.heartLives = this.add.sprite(145, 9, 'heart');
   }
 }

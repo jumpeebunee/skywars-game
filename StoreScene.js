@@ -5,7 +5,7 @@ class StoreScene extends Phaser.Scene {
   storeEvents(click, btn) {
     if (btn._text === 'Назад') {
       this.scene.start('menuGame');
-    } else if (btn._text === 'забрать') {
+    } else if (btn._text === 'за рекламу') {
       ysdk.adv.showRewardedVideo({
         callbacks: {
             onOpen: () => {
@@ -41,7 +41,7 @@ class StoreScene extends Phaser.Scene {
     this.add.text(GAME_CONFIG.width / 2 - 40, 20, 'Магазин', {
       font: '12px font1'
     })
-    this.add.text(GAME_CONFIG.width / 2 - 45, 35, `Рекорд: ${GAME_SETTINGS.maxScore}p`, {
+    this.add.text(GAME_CONFIG.width / 2 - 50, 35, `Рекорд: ${GAME_SETTINGS.maxScore} очков`, {
       font: '7px font1'
     })
     this.add.text(30, 65, 'ОчкиX2:', {
@@ -56,20 +56,20 @@ class StoreScene extends Phaser.Scene {
     this.add.text(30, 125, 'Корабль:', {
       font: '12px font1'
     })
-    this.scores = this.add.text(120, 65, '800p', {
-      font: '12px font1',
+    this.scores = this.add.text(120, 65, '800 очков', {
+      font: '10px font1',
       stroke: 'white'
     })
-    this.lives = this.add.text(110, 85, '1000p', {
-      font: '12px font1',
+    this.lives = this.add.text(110, 85, '1000 очков', {
+      font: '10px font1',
       stroke: 'white'
     })
-    this.speed = this.add.text(140, 105, '1200p', {
-      font: '12px font1',
+    this.speed = this.add.text(140, 105, '1200 очков', {
+      font: '10px font1',
       stroke: 'white'
     })
-    this.ship = this.add.text(130, 125, 'забрать', {
-      font: '12px font1',
+    this.ship = this.add.text(130, 125, 'за рекламу', {
+      font: '10px font1',
       stroke: 'white'
     })
     this.back = this.add.text(GAME_CONFIG.width / 2 - 40, GAME_CONFIG.height - 40, 'Назад', {

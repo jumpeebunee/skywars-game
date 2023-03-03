@@ -7,6 +7,7 @@ class MenuScene extends Phaser.Scene {
       this.music.stop();
       this.scene.start('playGame');
     } else if (btn.texture.key === 'storeGameBtn') {
+      this.music.stop();
       this.scene.start('storeGame');
     } else {
       if (!this.music.mute) {
@@ -21,8 +22,11 @@ class MenuScene extends Phaser.Scene {
   create() {
     ysdk.adv.showFullscreenAdv({
       callbacks: {
+          onOpen: function() {
+            this.music.mute = true;
+          },
           onClose: function(wasShown) {
-            console.log(wasShown)
+            this.music.mute = false;
           },
           onError: function(error) {
             console.log(error)
@@ -49,6 +53,7 @@ class MenuScene extends Phaser.Scene {
     if (GAME_SETTINGS.maxScore >= 1200) GAME_SETTINGS.playerSpeed = 150;
 
     if (!this.music) this.music = this.sound.add('mainMusic');
+    if (this.music.mute) this.musicBtn.setTexture('musicGameBtnDisabled')
     if (!this.music.isPlaying) this.music.play(MUSIC_CONFIG);
   }
   update() {
